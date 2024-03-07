@@ -1,4 +1,4 @@
-public class binarysearchtree {
+public class binarysearchtrees {
     public class Node {
         // Instance variables of Node class
         public int data;
@@ -17,7 +17,7 @@ public class binarysearchtree {
     public Node root;
 
     // Constructor to initialize the root to null by default
-    public binarysearchtree() {
+    public binarysearchtrees() {
         this.root = null;
     }
 
@@ -107,7 +107,7 @@ public class binarysearchtree {
     }
 
     public static void main(String[] args) {
-        BinarySearchTree bst = new BinarySearchTree();
+        binarysearchtrees bst = new binarysearchtrees();
         // Accept integer input from the user and insert into the BST
         // Display the 1-D array representation (implement this method)
         // Display the three tree traversals
