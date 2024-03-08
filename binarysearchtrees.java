@@ -174,7 +174,6 @@ public class binarysearchtrees {
                 choice = 0;
             }
         }
-        scanner.close();
         bst.toListWithPlaceholders();
         System.out.println("\nInorder traversal: ");
         bst.inorder();
@@ -183,6 +182,17 @@ public class binarysearchtrees {
         System.out.println("\n\nPostorder traversal: ");
         bst.postorder();
         System.out.println();
-        
+
+        System.out.println("Would you like to try again? (y/n)");
+        scanner.nextLine();
+        String tryAgain = scanner.nextLine();
+        if (tryAgain.equals("y")){
+            main(args);
+        } else if (tryAgain.equals("n")){
+            System.out.println("Goodbye!");
+        } else {
+            System.out.println("Invalid input.");
+        }
+        scanner.close();
     }
 }
