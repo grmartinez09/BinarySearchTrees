@@ -1,122 +1,188 @@
-public class binarysearchtrees {
-    public class Node {
-        // Instance variables of Node class
-        public int data;
-        public Node left;
-        public Node right;
+import java.util.*;
 
-        // Constructor
-        public Node(int data) {
-            this.data = data;
-            this.left = null;
-            this.right = null;
-        }
+class Node {
+    int key;
+    Node left, right;
+
+    public Node(int item) {
+        key = item;
+        left = right = null;
+    }
+}
+
+class BSTP {
+    Node root;
+
+    BSTP() {
+        root = null;
     }
 
-    // Instance variable for the root
-    public Node root;
-
-    // Constructor to initialize the root to null by default
-    public binarysearchtrees() {
-        this.root = null;
+    void insert(int key) {
+        root = insertRec(root, key);
     }
 
-    // Insert method to insert new data
-    public void insert(int newData) {
-        this.root = insert(root, newData);
-    }
-
-    private Node insert(Node root, int newData) {
-        // Base Case: If root is null, insert the new data
+    Node insertRec(Node root, int key) {
         if (root == null) {
-            return new Node(newData);
+            root = new Node(key);
+            return root;
         }
-
-        // Recursive case: Decide the position of the new node
-        if (newData < root.data) {
-            root.left = insert(root.left, newData);
-        } else if (newData > root.data) {
-            root.right = insert(root.right, newData);
-        }
-
+        if (key < root.key)
+            root.left = insertRec(root.left, key);
+        else if (key > root.key)
+            root.right = insertRec(root.right, key);
         return root;
     }
 
-    // Display the 1-D array representation
-    public void displayArrayRepresentation() {
-        int[] array = new int[getSize(root)];
-        int index = 0;
-        fillArray(root, array, index);
-        System.out.println("1-D Array Representation:");
-        for (int value : array) {
-            System.out.print(value + " ");
-        }
-        System.out.println();
+    void deleteKey(int key, boolean deleteFromLeft) {
+        root = deleteRec(root, key, deleteFromLeft);
     }
 
-    private int getSize(Node node) {
-        if (node == null) {
-            return 0;
+    Node deleteRec(Node root, int key, boolean deleteFromLeft) {
+        if (root == null) return root;
+        if (key < root.key)
+            root.left = deleteRec(root.left, key, deleteFromLeft);
+        else if (key > root.key)
+            root.right = deleteRec(root.right, key, deleteFromLeft);
+        else {
+            if (root.left == null)
+                return root.right;
+            else if (root.right == null)
+                return root.left;
+            if (deleteFromLeft) {
+                root.key = maxValue(root.left);
+                root.left = deleteRec(root.left, root.key, deleteFromLeft);
+            } else {
+                root.key = minValue(root.right);
+                root.right = deleteRec(root.right, root.key, deleteFromLeft);
+            }
         }
-        return 1 + getSize(node.left) + getSize(node.right);
+        return root;
     }
 
-    private void fillArray(Node node, int[] array, int index) {
-        if (node == null) {
+    int maxValue(Node root) {
+        int maxv = root.key;
+        while (root.right != null) {
+            maxv = root.right.key;
+            root = root.right;
+        }
+        return maxv;
+    }
+
+    int minValue(Node root) {
+        int minv = root.key;
+        while (root.left != null) {
+            minv = root.left.key;
+            root = root.left;
+        }
+        return minv;
+    }
+
+    void inorder() {
+        inorderRec(root);
+    }
+
+    void inorderRec(Node root) {
+        if (root != null) {
+            inorderRec(root.left);
+            System.out.print(root.key + " ");
+            inorderRec(root.right);
+        }
+    }
+
+    void preorder() {
+        preorderRec(root);
+    }
+
+    void preorderRec(Node root) {
+        if (root != null) {
+            System.out.print(root.key + " ");
+            preorderRec(root.left);
+            preorderRec(root.right);
+        }
+    }
+
+    void postorder() {
+        postorderRec(root);
+    }
+
+    void postorderRec(Node root) {
+        if (root != null) {
+            postorderRec(root.left);
+            postorderRec(root.right);
+            System.out.print(root.key + " ");
+        }
+    }
+
+    void toListWithPlaceholders() {
+        if (root == null) {
             return;
         }
-        fillArray(node.left, array, index);
-        array[index++] = node.data;
-        fillArray(node.right, array, index);
-    }
 
-    // Display the three tree traversals: Preorder, Inorder, Postorder
-    public void displayTraversals() {
-        System.out.println("Preorder Traversal:");
-        preorderTraversal(root);
+        List<Integer> list = new ArrayList<>();
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(root);
 
-        System.out.println("\nInorder Traversal:");
-        inorderTraversal(root);
+        while (!queue.isEmpty()) {
+            Node node = queue.poll();
 
-        System.out.println("\nPostorder Traversal:");
-        postorderTraversal(root);
-    }
-
-    private void preorderTraversal(Node node) {
-        if (node != null) {
-            System.out.print(node.data + " ");
-            preorderTraversal(node.left);
-            preorderTraversal(node.right);
+            if (node != null) {
+                list.add(node.key);
+                if (node.left != null || node.right != null) {
+                    queue.add(node.left);
+                    queue.add(node.right);
+                }
+            } else {
+                list.add(0);
+            }
         }
-    }
 
-    private void inorderTraversal(Node node) {
-        if (node != null) {
-            inorderTraversal(node.left);
-            System.out.print(node.data + " ");
-            inorderTraversal(node.right);
-        }
+        System.out.println("Array representation: " + list);
     }
+}
 
-    private void postorderTraversal(Node node) {
-        if (node != null) {
-            postorderTraversal(node.left);
-            postorderTraversal(node.right);
-            System.out.print(node.data + " ");
-        }
-    }
-
+public class binarysearchtrees {
     public static void main(String[] args) {
-        binarysearchtrees bst = new binarysearchtrees();
-        // Accept integer input from the user and insert into the BST
-        // Display the 1-D array representation (implement this method)
-        // Display the three tree traversals
-        bst.insert(10);
-        bst.insert(5);
-        bst.insert(15);
-        bst.insert(3);
-        bst.insert(7);
-
-        bst.displayTraversals();
+        BSTP bst = new BSTP();
+        Scanner scanner = new Scanner(System.in);
+        int choice = 0;
+        while (choice != 3){
+            System.out.println("\nBinary Search Tree Operations");
+            System.out.print("1. Insert\n2. Delete\n3. End\nEnter your choice: ");
+            choice = scanner.nextInt();
+            if (choice == 1) {
+                System.out.print("Enter the value to insert: ");
+                int item = scanner.nextInt();
+                scanner.nextLine(); 
+                bst.insert(item);
+                choice = 0;
+            }
+            else if (choice == 2) {
+                System.out.print("Enter the value to delete: ");
+                int item2 = scanner.nextInt();
+                scanner.nextLine();
+                System.out.print("Delete from:\n1. Left\n2. Right\nEnter your choice: ");
+                int deleteFrom = scanner.nextInt();
+                scanner.nextLine();
+                bst.deleteKey(item2, deleteFrom == 1);
+                choice = 0;
+            }
+            else if (choice == 3) {
+                break;
+            }
+            else {
+                System.out.println("Invalid choice.");
+                choice = 0;
+            }
+        }
+        scanner.close();
+        bst.toListWithPlaceholders();
+        System.out.println("\nInorder traversal: ");
+        bst.inorder();
+        System.out.println("\n\nPreorder traversal: ");
+        bst.preorder();
+        System.out.println("\n\nPostorder traversal: ");
+        bst.postorder();
+        System.out.println();
+        
     }
 }
