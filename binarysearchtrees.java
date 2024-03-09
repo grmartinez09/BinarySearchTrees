@@ -18,6 +18,10 @@ class BSTP {
     }
 
     void insert(int key) {
+        if (key == 0) {
+            System.out.println("Cannot input 0. Try Again.");
+            return;
+        }
         root = insertRec(root, key);
     }
 
@@ -175,12 +179,13 @@ public class binarysearchtrees {
             }
         }
         bst.toListWithPlaceholders();
-        System.out.println("\nInorder traversal: ");
-        bst.inorder();
         System.out.println("\n\nPreorder traversal: ");
         bst.preorder();
         System.out.println("\n\nPostorder traversal: ");
         bst.postorder();
+        System.out.println("\nInorder traversal: ");
+        bst.inorder();
+        System.out.println();
         System.out.println();
 
         System.out.println("Would you like to try again? (y/n)");
